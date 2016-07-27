@@ -111,9 +111,11 @@ public class Crawl extends Thread {
             while (true) {
                 byte[] bytes = messageHandler.read();
                 String msg = new String(Arrays.copyOfRange(bytes,8,bytes.length));
-
+                //返回的参数信息
                 if (msg.startsWith("type@=chatmessage")) {
+                    //用户在斗鱼的虚拟网名字段为Snick
                     String nickname = msg.split("Snick@A=",2)[1].split("@",2)[0];
+                    //用户发送的弹幕内容
                     String content = msg.split("content@=",2)[1].split("/",2)[0];
                     System.out.println("[" + nickname + "]:" + content);
                 }
