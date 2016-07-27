@@ -1,5 +1,6 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by geekgao on 16-1-29.
@@ -39,9 +41,15 @@ public class Crawl extends Thread {
         System.out.println("获取登录信息");
         String roomId = Utils.getRoomId();
         String time = String.valueOf(System.currentTimeMillis());
+        
+        //设置cookies
+        Map<String, String> cookies = null;
+        Response res = Jsoup.connect("http://www.panda.tv/"+roomId).timeout(30000).execute();
+        cookies = res.cookies();
+        
 
         String url1 = "http://www.panda.tv/ajax_chatroom?roomid=" + roomId + "&_=" + time;
-        Document doc1 = Jsoup.connect(url1).header("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36").ignoreContentType(true).get();
+        Document doc1 = Jsoup.connect(url1).header("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36").cookies(cookies).ignoreContentType(true).get();
         JSONObject jsonObject1 = new JSONObject(doc1.toString().split("<body>",2)[1].split("</body>",2)[0]);
 
         String _sign;
